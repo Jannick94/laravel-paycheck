@@ -6,7 +6,7 @@ use Money\Money;
 
 class TestAdjustment extends Adjustment
 {
-    public function toBeAdjustedAmount(Money $start): Money
+    public function adjust(Money $start): Money
     {
         $percentage = $start->allocate([5, 95]);
 

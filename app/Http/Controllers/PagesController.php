@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Money\Money;
-use App\Paycheck\DefaultPaycheck;
+use App\Models\Invoice;
+use App\Models\Paycheck;
 use App\Paycheck\Adjustments\TestAdjustment;
+use App\Paycheck\Adjustments\SecondTestAdjustment;
 
 class PagesController extends Controller
 {
     public function index()
     {
-        $startingAmount = Money::EUR(100000);
+        $paidInvoice = Invoice::first();
 
-        $paycheck = new DefaultPaycheck($startingAmount);
+        $paycheck = (new Paycheck)
+            ->addAdjustment(new TestAdjustment)
+            ->addAdjustment(new SecondTestAdjustment)
+            ->getResult($paidInvoice->amount);
 
-        $paycheck->addAdjustment(new TestAdjustment());
-        $paycheck->generatePdf();
+        dd($paycheck->resultAmount);
     }
 }
